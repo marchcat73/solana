@@ -1,0 +1,10 @@
+:root {
+  /* colors */
+  --color-default: #000;
+  --color-bg: #fff;
+  --color-link: #3366ff;
+
+  /* fonts */
+  --font-default: 'RobotoRegular', sans-serif;
+  --font-title: 'RalewayBold', sans-serif;
+}
