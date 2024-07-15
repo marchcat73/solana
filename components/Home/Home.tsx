@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import cn from 'classnames';
 import { useReactiveVar } from '@apollo/client';
 import { accountVar } from '@app/app/cache';
@@ -32,6 +33,11 @@ const Home = () => {
             <span>]</span>
           </>
         )}
+      </div>
+      <div className="mt-5">
+        <Link href="/transaction" className="link">
+          Transaction Page
+        </Link>
       </div>
     </div>
   );
