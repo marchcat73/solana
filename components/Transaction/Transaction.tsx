@@ -27,6 +27,7 @@ const schema = z.object({
 const TransactionForm = () => {
   const [costError, setCostError] = useState<string | null>(null);
   const [signature, setSignature] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const balance = useReactiveVar(balanceVar);
   const publicKey = useReactiveVar(publicKeyVar);
   const account = useReactiveVar(accountVar);
@@ -42,6 +43,7 @@ const TransactionForm = () => {
   const connection = new Connection('http://localhost:8899', 'finalized');
 
   const onSubmit = async (data: { cost: string; address: string }) => {
+    setIsLoading(true);
     const { cost, address } = data;
     const resiveValue = Number(cost);
     if (Number.isNaN(resiveValue)) {
@@ -71,8 +73,8 @@ const TransactionForm = () => {
         [account],
       );
 
-      console.log('signature', signature);
       setSignature(signature);
+      setIsLoading(false);
     }
   };
 
@@ -138,9 +140,19 @@ const TransactionForm = () => {
             </p>
           )}
         </div>
-        <button type="submit" className="mt-6">
-          Submit
-        </button>
+        {isLoading ? (
+          <p className={cn('mt-6')}>Loading...</p>
+        ) : (
+          <button
+            type="submit"
+            className={cn(
+              'block rounded-md p-1.5 mt-6 ring-1 ring-inset ring-gray-300 text-sm font-medium',
+            )}
+            disabled={isLoading}
+          >
+            Submit
+          </button>
+        )}
       </form>
       <div>
         {costError && <p className={styles.errorMessage}>{costError}</p>}
