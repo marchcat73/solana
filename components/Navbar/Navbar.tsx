@@ -51,8 +51,6 @@ export default function Navbar({ className }: NavbarProps) {
     }
   };
 
-  // setInterval(() => getBalance(), 1000);
-
   const ws = new WebSocket('ws://127.0.0.1:8900');
 
   ws.onopen = () => {
