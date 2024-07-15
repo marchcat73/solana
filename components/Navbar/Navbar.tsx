@@ -75,7 +75,16 @@ export default function Navbar({ className }: NavbarProps) {
   ws.onmessage = (event) => {
     try {
       const buffer = event.data;
-      console.info(buffer);
+
+      if (buffer) {
+        const data = JSON.parse(buffer);
+        if (data?.method === 'accountNotification') {
+          const balance =
+            data?.params?.result?.value?.lamports / LAMPORTS_PER_SOL;
+
+          balanceVar(balance);
+        }
+      }
     } catch (e) {
       console.error(e);
     }

@@ -1,4 +1,4 @@
-import React from 'react';
+'use client';
 import { useReactiveVar } from '@apollo/client';
 import { accountVar } from '@app/app/cache';
 
