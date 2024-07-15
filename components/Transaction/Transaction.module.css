@@ -2,3 +2,8 @@
   position: relative;
   display: grid;
 }
+
+.errorMessage {
+  color: red;
+  font-size: 0.7rem;
+}
