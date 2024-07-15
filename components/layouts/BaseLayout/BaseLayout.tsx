@@ -13,7 +13,7 @@ const BaseLayout = ({
       <Navbar className={styles.header} />
       <main
         className={cn(
-          'flex min-h-screen flex-col items-center justify-between p-24',
+          'flex flex-col items-center justify-start p-24',
           styles.body,
         )}
       >

@@ -1,0 +1,18 @@
+.home {
+  position: relative;
+  display: grid;
+  width: 100%;
+}
+
+.secret {
+  text-wrap: wrap;
+  font-size: 0.6rem;
+
+  @media screen and (min-width: 380px) {
+    font-size: 0.8rem;
+  }
+
+  @media screen and (min-width: 576px) {
+    font-size: 1rem;
+  }
+}
