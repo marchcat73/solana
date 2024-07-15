@@ -2,10 +2,23 @@
 /* eslint-disable no-console */
 'use client';
 import React, { useState } from 'react';
+import { useReactiveVar } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import cn from 'classnames';
+import bs58 from 'bs58';
+import {
+  Connection,
+  SystemProgram,
+  LAMPORTS_PER_SOL,
+  PublicKey,
+  Keypair,
+  Transaction,
+  sendAndConfirmTransaction,
+} from '@solana/web3.js';
+import { Buffer } from 'buffer';
+import { balanceVar, publicKeyVar, accountVar } from '@app/app/cache';
 import styles from './Transaction.module.css';
 
 const schema = z.object({
@@ -13,8 +26,11 @@ const schema = z.object({
   address: z.string().min(44).max(44),
 });
 
-const Transaction = () => {
+const TransactionForm = () => {
   const [costError, setCostError] = useState<string | null>(null);
+  const balance = useReactiveVar(balanceVar);
+  const publicKey = useReactiveVar(publicKeyVar);
+  const account = useReactiveVar(accountVar);
   const {
     handleSubmit,
     formState: { errors },
@@ -24,18 +40,43 @@ const Transaction = () => {
     resolver: zodResolver(schema),
   });
 
+  const connection = new Connection('http://localhost:8899', 'finalized');
+
   const onSubmit = async (data: { cost: string; address: string }) => {
     const { cost, address } = data;
     const resiveValue = Number(cost);
     if (Number.isNaN(resiveValue)) {
       setCostError('Cost not Number');
       return;
+    } else if (resiveValue > balance) {
+      setCostError('Insufficient balance');
+      return;
+    } else if (publicKey === address) {
+      setCostError('You are trying to send money to yourself');
+      return;
     } else {
       setCostError(null);
     }
-    console.log(data);
+
+    const resAdd = bs58.decode(address);
+    const toPubkey = Keypair.fromSecretKey(resAdd);
+
+    if (account) {
+      const transferInstruction = SystemProgram.transfer({
+        fromPubkey: account.publicKey,
+        toPubkey: toPubkey.publicKey,
+        lamports: resiveValue * LAMPORTS_PER_SOL, // Convert transferAmount to lamports
+      });
+
+      const transaction = new Transaction().add(transferInstruction);
+      const sign = await sendAndConfirmTransaction(connection, transaction, [
+        account,
+      ]);
+
+      console.log(sign);
+    }
   };
-  console.log(errors);
+
   return (
     <div className={cn(styles.transaction)}>
       <form className="mt-6" onSubmit={handleSubmit(onSubmit)}>
@@ -109,4 +150,4 @@ const Transaction = () => {
   );
 };
 
-export default Transaction;
+export default TransactionForm;
