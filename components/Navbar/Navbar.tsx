@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -17,8 +16,6 @@ export default function Navbar({ className }: NavbarProps) {
 
   const checkIsConnected = async () => {
     try {
-      // const connection = new Connection(clusterApiUrl('testnet'), 'confirmed');
-
       const slot = await connection.getSlot();
 
       if (slot) {
@@ -35,21 +32,21 @@ export default function Navbar({ className }: NavbarProps) {
     }
   };
 
-  const getBalance = async () => {
-    try {
-      const slot = await connection.getSlot();
+  // const getBalance = async () => {
+  //   try {
+  //     const slot = await connection.getSlot();
 
-      if (slot) {
-        if (account) {
-          const stakeBalance = await connection.getBalance(account.publicKey);
-          const balance = stakeBalance / LAMPORTS_PER_SOL;
-          balanceVar(balance);
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //     if (slot) {
+  //       if (account) {
+  //         const stakeBalance = await connection.getBalance(account.publicKey);
+  //         const balance = stakeBalance / LAMPORTS_PER_SOL;
+  //         balanceVar(balance);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const ws = new WebSocket('ws://127.0.0.1:8900');
 
