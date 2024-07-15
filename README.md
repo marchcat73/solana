@@ -58,3 +58,11 @@ solana-keygen new
 ```
 
 Сохраняем его publicKey где нибуть в текстовом файле.
+
+Через форму на странице тразанкций посылаем на этот кошелек SOL
+
+и проверяем
+
+```bash
+solana balance <newPublicKey> --url localhost
+```
