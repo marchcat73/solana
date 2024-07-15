@@ -1,9 +1,10 @@
-import { BaseLayout } from '@app/components';
+import { BaseLayout, Home } from '@app/components';
 
-export default function Home() {
+export default function Page() {
   return (
     <BaseLayout>
       <p>Solana Wallet</p>
+      <Home />
     </BaseLayout>
   );
 }
