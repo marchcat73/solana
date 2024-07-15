@@ -25,7 +25,7 @@ const Home = () => {
                 if (index === array.length - 1) {
                   return <span key={`${el}-${index}`}>{el}</span>;
                 } else {
-                  return <span key={`${el}-${index}`}>{el}, </span>;
+                  return <span key={`${el}-${index}`}>{el},</span>;
                 }
               })}
             </p>
