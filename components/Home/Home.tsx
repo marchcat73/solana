@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import bs58 from 'bs58';
 import cn from 'classnames';
 import { useReactiveVar } from '@apollo/client';
 import { accountVar } from '@app/app/cache';
@@ -7,6 +8,11 @@ import styles from './Home.module.css';
 
 const Home = () => {
   const account = useReactiveVar(accountVar);
+  let privateKey;
+  if (account) {
+    const bytes = Uint8Array.from(account.secretKey);
+    privateKey = bs58.encode(bytes);
+  }
 
   return (
     <div className={cn(styles.home)}>
@@ -33,6 +39,10 @@ const Home = () => {
             <span>]</span>
           </>
         )}
+      </div>
+      <div className="my-2">
+        privateKey:{' '}
+        {privateKey && <p className={styles.secret}>{privateKey}</p>}
       </div>
       <div className="mt-5">
         <Link href="/transaction" className="link">
