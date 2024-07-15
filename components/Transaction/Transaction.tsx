@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-console */
 'use client';
 import React, { useState } from 'react';
 import { useReactiveVar } from '@apollo/client';
@@ -12,7 +10,6 @@ import {
   SystemProgram,
   LAMPORTS_PER_SOL,
   PublicKey,
-  Keypair,
   Transaction,
   sendAndConfirmTransaction,
 } from '@solana/web3.js';
@@ -59,10 +56,12 @@ const TransactionForm = () => {
       setCostError(null);
     }
 
+    const publicKeyTo = new PublicKey(address);
+
     if (account) {
       const transferInstruction = SystemProgram.transfer({
         fromPubkey: account.publicKey,
-        toPubkey: address,
+        toPubkey: publicKeyTo,
         lamports: resiveValue * LAMPORTS_PER_SOL, // Convert transferAmount to lamports
       });
 
