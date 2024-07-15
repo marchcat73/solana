@@ -1,8 +1,11 @@
 import { makeVar, InMemoryCache } from '@apollo/client';
+import { Keypair } from '@solana/web3.js';
 
 export const balanceVar = makeVar(0);
 
-export const pathNameVar = makeVar('');
+export const publicKeyVar = makeVar('');
+
+export const accountVar = makeVar<Keypair | null>(null);
 
 export const cache = new InMemoryCache({
   typePolicies: {
@@ -13,9 +16,14 @@ export const cache = new InMemoryCache({
             return balanceVar();
           },
         },
-        pathName: {
+        account: {
           read() {
-            return pathNameVar();
+            return accountVar();
+          },
+        },
+        publicKey: {
+          read() {
+            return publicKeyVar();
           },
         },
         nfts: {
