@@ -2,6 +2,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+Установка локального кластера Solana: [https://solana.com/ru/developers/guides/getstarted/setup-local-development](https://solana.com/ru/developers/guides/getstarted/setup-local-development)
+
 First, run the development server:
 
 ```bash
