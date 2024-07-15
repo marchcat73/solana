@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import cn from 'classnames';
-import bs58 from 'bs58';
 import {
   Connection,
   SystemProgram,
@@ -17,7 +16,6 @@ import {
   Transaction,
   sendAndConfirmTransaction,
 } from '@solana/web3.js';
-import { Buffer } from 'buffer';
 import { balanceVar, publicKeyVar, accountVar } from '@app/app/cache';
 import styles from './Transaction.module.css';
 
@@ -28,6 +26,7 @@ const schema = z.object({
 
 const TransactionForm = () => {
   const [costError, setCostError] = useState<string | null>(null);
+  const [signature, setSignature] = useState<string | null>(null);
   const balance = useReactiveVar(balanceVar);
   const publicKey = useReactiveVar(publicKeyVar);
   const account = useReactiveVar(accountVar);
@@ -58,22 +57,22 @@ const TransactionForm = () => {
       setCostError(null);
     }
 
-    const resAdd = bs58.decode(address);
-    const toPubkey = Keypair.fromSecretKey(resAdd);
-
     if (account) {
       const transferInstruction = SystemProgram.transfer({
         fromPubkey: account.publicKey,
-        toPubkey: toPubkey.publicKey,
+        toPubkey: address,
         lamports: resiveValue * LAMPORTS_PER_SOL, // Convert transferAmount to lamports
       });
 
       const transaction = new Transaction().add(transferInstruction);
-      const sign = await sendAndConfirmTransaction(connection, transaction, [
-        account,
-      ]);
+      const signature = await sendAndConfirmTransaction(
+        connection,
+        transaction,
+        [account],
+      );
 
-      console.log(sign);
+      console.log('signature', signature);
+      setSignature(signature);
     }
   };
 
@@ -145,6 +144,11 @@ const TransactionForm = () => {
       </form>
       <div>
         {costError && <p className={styles.errorMessage}>{costError}</p>}
+      </div>
+      <div className="mt-4">
+        {signature && (
+          <p className={styles.signature}>Transaction signature: {signature}</p>
+        )}
       </div>
     </div>
   );
